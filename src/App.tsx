@@ -244,7 +244,7 @@ export default function App() {
     <div className="app" data-stage={round.stage} data-reduced={reducedMotion ? '' : undefined}>
       <header className="topbar">
         <h1 className="brand">
-          <span aria-hidden="true">🏙️</span> CensusGuessr
+          Census<em>Guessr</em>
         </h1>
         <div className="tabs" role="tablist" aria-label="Game mode">
           <button
@@ -302,7 +302,9 @@ export default function App() {
               <div className="eyebrow">
                 {mode === 'daily' ? `Daily Challenge #${round.puzzle}` : 'Practice round'}
               </div>
-              <h2 className="panel-title">Which U.S. city is this?</h2>
+              <h2 className="panel-title">
+                Which U.S. city <em>is this?</em>
+              </h2>
             </div>
             <div className="meter" aria-label={`Clue ${round.cluesRevealed} of ${TOTAL_CLUES}`}>
               <div className="meter-dots" aria-hidden="true">

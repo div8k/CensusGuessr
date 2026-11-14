@@ -176,4 +176,5 @@ the URL forces the same behaviour.
 
 Code: [MIT](LICENSE). Census Bureau data is in the public domain. This product uses Census Bureau
 data but is not endorsed or certified by the Census Bureau. Map data © OpenStreetMap contributors
-(ODbL).
+(ODbL). Fonts are Instrument Serif, Geist, Geist Mono and Handjet (all SIL Open Font License),
+bundled through `@fontsource` packages so nothing loads from a CDN.

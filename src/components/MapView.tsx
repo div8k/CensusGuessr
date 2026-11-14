@@ -116,7 +116,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
     L.geoJSON(feature(topo, topo.objects.states as GeometryCollection), {
       pane: 'outline',
       interactive: false,
-      style: { color: '#8fa0b8', weight: 1, fillColor: '#f3efe6', fillOpacity: 1 },
+      style: { color: '#3a3a37', weight: 1, fillColor: '#121211', fillOpacity: 1 },
     }).addTo(map);
 
     let tileErrors = 0;
@@ -188,9 +188,10 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
     const ensureLine = (guess: City, answer: City) => {
       if (line) return;
       line = L.polyline([at(guess), at(answer)], {
-        color: '#17223b',
-        weight: 2.5,
-        dashArray: '7 9',
+        color: '#ece8df',
+        weight: 1.5,
+        dashArray: '2 7',
+        lineCap: 'round',
         interactive: false,
       }).addTo(pins);
     };
