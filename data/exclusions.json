@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "acs": {
+      "release": "ACS 5-year 2020-2024",
+      "year": 2024,
+      "source": "https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/"
+    },
+    "gazetteer": {
+      "year": 2025,
+      "source": "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2025_Gazetteer/2025_Gaz_place_national.zip"
+    },
+    "minPopulation": 100000,
+    "placesInAcs": 32330,
+    "candidates": 351,
+    "excluded": 4,
+    "count": 347
+  },
+  "excluded": [
+    {
+      "geoid": "7206593",
+      "name": "Bayam\u00f3n zona urbana",
+      "population": 166923,
+      "reason": "state-equivalent is not assigned to a Census region (Puerto Rico)"
+    },
+    {
+      "geoid": "7214290",
+      "name": "Carolina zona urbana",
+      "population": 138633,
+      "reason": "state-equivalent is not assigned to a Census region (Puerto Rico)"
+    },
+    {
+      "geoid": "7263820",
+      "name": "Ponce zona urbana",
+      "population": 107805,
+      "reason": "state-equivalent is not assigned to a Census region (Puerto Rico)"
+    },
+    {
+      "geoid": "7276770",
+      "name": "San Juan zona urbana",
+      "population": 317995,
+      "reason": "state-equivalent is not assigned to a Census region (Puerto Rico)"
+    }
+  ]
+}
