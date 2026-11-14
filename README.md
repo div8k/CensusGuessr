@@ -28,16 +28,56 @@ Math.round(5000 * Math.exp(-distanceKm / 500) * (1 - 0.10 * (cluesUsed - 1)))
 Distance is the Haversine great-circle distance between the two places' Gazetteer internal
 points. An exact guess on clue one earns 5,000; each extra clue lowers the maximum by 500.
 
-## Run it locally
+## Get the game working
 
-Requires Node.js 20+.
+You need two free tools: [Git](https://git-scm.com/downloads) and
+[Node.js](https://nodejs.org) (version 20.19 or newer; the "LTS" download is fine).
+To check they are installed, run `git --version` and `node --version` in a terminal.
+
+**1. Download the game**
+
+```bash
+git clone https://github.com/div8k/CensusGuessr.git
+cd CensusGuessr
+```
+
+**2. Install what it needs** (once; takes under a minute)
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
+```
+
+**3. Start it**
+
+```bash
+npm run dev
+```
+
+**4. Play.** Open <http://localhost:5173> in your browser. Leave the terminal window open
+while you play; press <kbd>Ctrl</kbd>+<kbd>C</kbd> in it to stop the game.
+
+That's all. The city data is already included, so there are no accounts, API keys or downloads
+to set up. An internet connection is only used for the map background.
+
+### If something goes wrong
+
+| What you see | What to do |
+|---|---|
+| `command not found: npm` or `node` | Node.js isn't installed, or the terminal was open during the install. Install it from nodejs.org, then open a new terminal. |
+| `npm install` prints errors about the Node version | Your Node.js is too old. Install the current LTS from nodejs.org. |
+| `Port 5173 is in use` | The game picks the next free port and prints the address to open. Use that one. |
+| The page is blank | Make sure you opened the `http://localhost:…` address, not the `index.html` file. |
+| The map is grey with only state outlines | Map tiles couldn't load (offline or blocked). The game still works: pins, labels, distance and score all show. |
+| Yesterday's puzzle is still showing | Refresh the page. A new Daily Challenge starts at 00:00 UTC. |
+
+### Other commands
+
+```bash
 npm test           # unit tests (scoring, distance, schedule, search, data)
 npm run build      # type-check + production build into dist/
 npm run preview    # serve the production build
+npm run scan       # build, then run the security scan (0 failures = clean)
+npm run data       # rebuild the city data from Census sources (optional)
 ```
 
 ## Deploy to GitHub Pages
@@ -51,8 +91,9 @@ configuration.
    git push -u origin main
    ```
 2. In the repository, open **Settings → Pages** and set **Source** to **GitHub Actions**.
-3. Every push to `main` runs `.github/workflows/deploy.yml`: `npm ci`, `npm test`,
-   `npm run build`, then publishes `dist/`.
+3. Every push to `main` runs `.github/workflows/deploy.yml`: `npm ci`, a dependency
+   vulnerability and signature check, `npm test`, `npm run build`, then publishes `dist/`.
+4. The game appears at `https://<user>.github.io/<repo>/` a minute or two later.
 
 ## Data
 
@@ -163,6 +204,25 @@ distance stay readable if tiles fail to load.
 
 Camera moves are instant when the OS "reduce motion" setting is on. Adding `?reducedMotion=1` to
 the URL forces the same behaviour.
+
+## Security
+
+The game is a static page with no server, accounts, cookies, analytics or API keys. The only
+thing it stores is your Daily Challenge progress, in your own browser's `localStorage`.
+
+- **Content Security Policy.** The production page only runs its own script, and may load
+  images from one outside host: the map tile server. Nothing else can be loaded or contacted.
+- **No HTML from strings.** Everything on screen, including map labels, is rendered as text.
+- **Saved progress is untrusted input.** It is range-checked on load and discarded if malformed.
+- **Deploys.** The workflow has no default permissions, pins every action to a full commit SHA,
+  and fails if a dependency has a known high-severity vulnerability or a bad registry
+  signature. Dependabot proposes weekly updates for npm packages and actions.
+- **`npm run scan`** repeats all of this locally: 37 checks covering dependencies, secrets,
+  risky code patterns, the built page and the workflow. The exit code is the number of failures.
+
+Two things the page cannot do for itself on GitHub Pages: set HTTP security headers (so the
+policy is a `<meta>` tag, which cannot forbid framing), and hide the daily answer (see below).
+To report a problem, open an issue on the repository.
 
 ## Limitations
 

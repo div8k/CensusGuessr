@@ -14,7 +14,7 @@ import type { City } from '../lib/types';
 const TILE_URL = import.meta.env.VITE_TILE_URL || 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const TILE_ATTRIBUTION =
   import.meta.env.VITE_TILE_ATTRIBUTION ||
-  '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors';
+  '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors';
 
 const US_BOUNDS: L.LatLngBoundsLiteral = [
   [24.3, -125],
@@ -68,13 +68,17 @@ function pinIcon(kind: PinKind): L.DivIcon {
   });
 }
 
-function pinLabel(title: string, city: City): HTMLElement {
+/** Label built with textContent, so no string is ever parsed as HTML. */
+function pinLabel(title: string | null, city: City): HTMLElement {
   const el = document.createElement('div');
-  const strong = document.createElement('strong');
-  strong.textContent = title;
+  if (title) {
+    const strong = document.createElement('strong');
+    strong.textContent = title;
+    el.append(strong);
+  }
   const span = document.createElement('span');
   span.textContent = cityLabel(city);
-  el.append(strong, span);
+  el.append(span);
   return el;
 }
 
@@ -159,7 +163,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
         keyboard: false,
         zIndexOffset: kind === 'answer' ? 500 : 0,
       }).addTo(pins);
-      marker.bindTooltip(title ? pinLabel(title, city) : cityLabel(city), {
+      marker.bindTooltip(pinLabel(title, city), {
         permanent: true,
         direction,
         offset: [0, direction === 'top' ? -14 : 14],

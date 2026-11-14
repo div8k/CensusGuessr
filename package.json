@@ -10,7 +10,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "data": "python3 scripts/prepare_data.py"
+    "data": "python3 scripts/prepare_data.py",
+    "scan": "npm run build && bash scripts/security_scan.sh"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
