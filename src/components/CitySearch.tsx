@@ -4,6 +4,10 @@ import { buildIndex, searchCities } from '../lib/search';
 import type { City } from '../lib/types';
 
 interface Props {
+  /** Field label, e.g. "Guess 2 of 3". */
+  label: string;
+  /** City ids already guessed this round; left out of the suggestions. */
+  exclude: string[];
   selected: City | null;
   onSelect: (city: City | null) => void;
 }
@@ -11,14 +15,22 @@ interface Props {
 const INDEX = buildIndex(CITIES);
 
 /** Autocomplete combobox. Picking a suggestion selects it; editing the text clears the selection. */
-export default function CitySearch({ selected, onSelect }: Props) {
+export default function CitySearch({ label, exclude, selected, onSelect }: Props) {
   const [query, setQuery] = useState(selected ? cityLabel(selected) : '');
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listId = useId();
 
-  const matches = useMemo(() => (selected ? [] : searchCities(INDEX, query)), [query, selected]);
+  const matches = useMemo(
+    () =>
+      selected
+        ? []
+        : searchCities(INDEX, query, 8 + exclude.length)
+            .filter((c) => !exclude.includes(c.id))
+            .slice(0, 8),
+    [query, selected, exclude],
+  );
   const showList = open && !selected && query.trim() !== '';
 
   const choose = (city: City) => {
@@ -48,7 +60,7 @@ export default function CitySearch({ selected, onSelect }: Props) {
   return (
     <div className="search">
       <label className="search-label" htmlFor={`${listId}-input`}>
-        Your guess
+        {label}
       </label>
       <div className="search-box">
         <input

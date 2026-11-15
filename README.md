@@ -4,8 +4,9 @@ Identify a famous U.S. city from Census clues, then watch the map fly from your 
 answer. The pool is 60 of the largest and best-known cities, from New York to Honolulu.
 
 - **Daily Challenge** — one city a day, resetting at 00:00 UTC. Every player gets the cities in
-  their own shuffled order.
+  their own shuffled order, with streaks and stats saved in the browser.
 - **Practice** — unlimited random rounds.
+- **Challenge a friend** — copy a link to the city you just played so someone else can try it.
 - Static site: React + TypeScript + Vite + Leaflet. No backend, no API keys, no live Census calls.
 
 ## How it plays
@@ -13,22 +14,44 @@ answer. The pool is 60 of the largest and best-known cities, from New York to Ho
 1. The first clue is visible. Search for a city (the list shows city and state, so same-named
    cities stay distinct) and pick one to drop a preview pin, or **Reveal next clue**.
 2. Up to eight clues appear in this order: median age, work-from-home share, median home value,
-   bike-or-transit commute share, most common reported ancestry, share born in a different U.S.
-   state, median year housing was built, Census region. Revealing a clue never moves the map.
-3. **Submit guess** locks it in. The map zooms to your guess, pulls back if you were far off,
-   flies to the actual city, then frames both pins with a dashed line. **Skip animation** (or
+   bike-or-transit commute share, population, share born in a different U.S. state, median year
+   housing was built, Census region. Each numeric clue also says where the city ranks among the
+   60 ("9th youngest of 60") and what a typical city in the game looks like. Revealing a clue
+   never moves the map.
+3. **Submit guess.** You get three. A miss drops a numbered pin and tells you how far away the
+   answer is and in which compass direction ("2,767 km ↖ NW"), then you guess again. You can
+   also stop and reveal the answer.
+4. When the round ends, the map zooms to your best guess, pulls back if you were far off, flies
+   to the actual city, then frames both pins with a dotted line. **Skip animation** (or
    <kbd>Esc</kbd>) jumps to the end; **View answer** and **Show both** replay the camera.
-4. **Copy result** shares a spoiler-free line:
-   `🏙️ CensusGuessr #42 · 🧩 3/8 clues · 📍 87 km · ⭐ 3,361/5,000`
+5. A comparison table then shows all eight clues for your guess next to the actual city.
+6. **Copy result** shares a spoiler-free line:
+   `🏙️ CensusGuessr #42 · 🧩 3/8 clues · 🎯 2/3 guesses · 📍 87 km · ⭐ 3,361/5,000`
 
 ### Scoring
 
 ```ts
-Math.round(5000 * Math.exp(-distanceKm / 500) * (1 - 0.10 * (cluesUsed - 1)))
+Math.round(
+  5000 * Math.exp(-distanceKm / 500) * (1 - 0.10 * (cluesUsed - 1)) * (1 - 0.20 * (guess - 1)),
+)
 ```
 
 Distance is the Haversine great-circle distance between the two places' Gazetteer internal
-points. An exact guess on clue one earns 5,000; each extra clue lowers the maximum by 500.
+points. Each guess is scored with the clues showing at the time, and the round keeps your
+**best single guess**, so taking another guess can never lower your score. An exact first guess
+on clue one earns 5,000. Each extra clue lowers the maximum by 10% of 5,000, and the second and
+third guesses are worth 80% and 60%.
+
+### Stats and challenge links
+
+- Finishing a Daily Challenge updates your stats: days played, current and longest streak,
+  average and best score. They appear under the result and in **How to play**. A streak
+  continues when you play consecutive puzzle numbers. Stats live in `localStorage`
+  (`censusguessr.stats.v1`) and are per browser.
+- **Challenge a friend** copies a link such as `…/?c=2ze677d`. The code is a light scramble of
+  the city's id, so the address does not give the answer away, but it is not a secret. Opening
+  the link starts that city as a one-off round and removes the code from the address bar.
+  Anything that does not decode to a city in the game is ignored.
 
 ## Get the game working
 
@@ -109,8 +132,8 @@ The app ships a committed snapshot, [`src/data/cities.json`](src/data/cities.jso
 | Coordinates | [Census Gazetteer, places file](https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2025_Gazetteer/2025_Gaz_place_national.zip) | **2025 Gazetteer** |
 | Regions | [Census regions and divisions](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) | — |
 
-Regenerate it (Python 3.9+, standard library only; downloads about 400 MB once and caches the
-place rows in `.cache/`):
+Regenerate it (Python 3.9+, standard library only; downloads a few hundred MB once and caches
+the place rows in `.cache/`):
 
 ```bash
 npm run data       # = python3 scripts/prepare_data.py
@@ -131,33 +154,27 @@ run, so a renumbered table fails loudly.
 | Work from home | `B08301_021` ÷ `B08301_001` | Workers 16 years and over |
 | Median home value | `B25077_001` | Owner-occupied housing units |
 | Bike or public transit | (`B08301_010` public transportation + `B08301_018` bicycle) ÷ `B08301_001` | Workers 16 years and over |
-| Most common ancestry | largest eligible line of `B04006` (below) | Total population |
+| Population | `B01003_001` | Total population |
 | Born in a different U.S. state | `B05002_004` ÷ `B05002_001` | Total population |
 | Median year housing built | `B25035_001` | Housing units |
 | Census region | from the state FIPS code | — |
 
-Population for the 100,000 threshold is `B01003_001` from the same release.
+The 100,000 threshold uses the same `B01003_001` population estimate.
 
 - **Public transit** is the ACS "Public transportation" line: bus, subway or elevated rail,
   long-distance train or commuter rail, light rail/streetcar/trolley, and ferryboat. Taxi and
   ride-hailing are a separate line and are not included.
-- **Top ancestry.** `B04006` ("People Reporting Ancestry") counts each person once under every
-  ancestry they reported, first or second. The candidates are its 70 top-level lines, with the
-  group lines *Arab*, *Subsaharan African* and *West Indian (except Hispanic groups)* each
-  competing as one category instead of through their components. The two residual lines are
-  excluded: *Other groups* (`B04006_108`, a combined bucket that is not one ancestry and holds
-  most Hispanic, Asian, Black/African American, American Indian and Pacific Islander responses)
-  and *Unclassified or not reported* (`B04006_109`). The largest estimate wins; ties go to the
-  earlier table line. So this clue is "the largest single ancestry group the table itemizes",
-  which in practice is mostly European, "American", Sub-Saharan African, West Indian or Arab.
 - **Born in a different U.S. state** is `B05002_004`, "Native: Born in other state in the United
   States", over the total population. It excludes people born in their state of residence,
   people born in Puerto Rico, the U.S. Island Areas or abroad to American parents, and the
   foreign-born. The numerator is *not* `_003`, which is "Born in state of residence".
 - **Bottom/top codes.** A median year built at or below 1939 is stored as 1939 and shown as
   "1939 or earlier" (Buffalo and St. Louis in the current pool). A median home value at the
-  $2,000,000 top code would be shown as
-  "$2,000,000+" (none currently).
+  $2,000,000 top code would be shown as "$2,000,000+" (none currently).
+- **Ranks** ("3rd highest of 60") compare a city with the other cities in the game, not with
+  all U.S. places, and count from whichever end is nearer. Tied cities share a rank.
+- **Earlier versions** had a "most common reported ancestry" clue from table `B04006`. It was
+  replaced by population because it came out as German or English for 48 of the 60 cities.
 
 ### Pool and exclusions
 
@@ -203,8 +220,9 @@ shortened (Nashville-Davidson → Nashville, Urban Honolulu → Honolulu); the o
 - `npm run data` never rewrites the schedule. If a data refresh adds or removes cities, append a
   new entry to `versions` with the next `version`, a new `seed`, the new `pool`, and a
   `startPuzzle` in the future. Earlier puzzle numbers keep their cities (covered by a unit test).
-- Progress (clues revealed, then the result) is saved in `localStorage` under
-  `censusguessr.daily.v1`, so a refresh restores your place.
+- Progress (clues revealed and each guess, then that the round is over) is saved in
+  `localStorage` under `censusguessr.daily.v2`, so a refresh restores your place. Distances and
+  scores are not stored; they are recomputed from the guesses.
 
 ## Map
 
@@ -217,9 +235,11 @@ for heavier traffic, build with another provider:
 VITE_TILE_URL="https://example.com/{z}/{x}/{y}.png" VITE_TILE_ATTRIBUTION="© Example" npm run build
 ```
 
-U.S. state outlines (from [`us-atlas`](https://github.com/topojson/us-atlas), derived from Census
-cartographic boundary files) are bundled and drawn under the tiles, so pins, labels, score and
-distance stay readable if tiles fail to load.
+Simplified U.S. state outlines are bundled and drawn under the tiles, so pins, labels, score and
+distance stay readable if tiles fail to load. They come from
+[`us-atlas`](https://github.com/topojson/us-atlas) (derived from Census cartographic boundary
+files), reduced from about 115 kB to 15 kB by `npm run outlines`, and load as a separate small
+file after the first screen.
 
 Camera moves are instant when the OS "reduce motion" setting is on. Adding `?reducedMotion=1` to
 the URL forces the same behaviour.
@@ -227,17 +247,20 @@ the URL forces the same behaviour.
 ## Security
 
 The game is a static page with no server, accounts, cookies, analytics or API keys. The only
-things it stores are your Daily Challenge progress and a random id that sets your city order,
-both in your own browser's `localStorage`. Neither is sent anywhere.
+things it stores are your Daily Challenge progress, your stats and a random id that sets your
+city order, all in your own browser's `localStorage`. None of it is sent anywhere.
 
 - **Content Security Policy.** The production page only runs its own script, and may load
   images from one outside host: the map tile server. Nothing else can be loaded or contacted.
 - **No HTML from strings.** Everything on screen, including map labels, is rendered as text.
-- **Saved progress is untrusted input.** It is range-checked on load and discarded if malformed.
+- **Saved data and links are untrusted input.** Saved progress and stats are type- and
+  range-checked on load and discarded if malformed. A challenge code must match a strict
+  pattern and decode to a city in the game, or it is ignored.
 - **Deploys.** The workflow has no default permissions, pins every action to a full commit SHA,
   and refuses to publish if a dependency has a known high-severity vulnerability or a bad
-  registry signature, or if any check in the security scan fails. Dependabot proposes weekly updates for npm packages and actions.
-- **`npm run scan`** repeats all of this locally: 37 checks covering dependencies, secrets,
+  registry signature, or if any check in the security scan fails. Dependabot proposes weekly
+  updates for npm packages and actions.
+- **`npm run scan`** repeats all of this locally: 39 checks covering dependencies, secrets,
   risky code patterns, the built page and the workflow. The exit code is the number of failures.
 
 Two things the page cannot do for itself on GitHub Pages: set HTTP security headers (so the
@@ -248,11 +271,12 @@ To report a problem, open an issue on the repository.
 
 - ACS figures are sample estimates with margins of error, which the game does not show.
 - Distances are between Gazetteer internal points, not downtowns or city halls.
-- The ancestry clue cannot return groups the Census folds into "Other groups" (see above).
 - The daily puzzle is computed in the browser, so the answer is discoverable by reading the code,
   and a player's clock decides which puzzle they see.
 - Because each player has their own city order, a shared result (`#42`) names the day, not a
-  city that others also played.
+  city that others also played. Use **Challenge a friend** to compare on the same city.
+- Stats and progress are per browser; clearing site data resets them.
+- The first load is about 130 kB of script (gzipped) plus fonts.
 
 ## License
 

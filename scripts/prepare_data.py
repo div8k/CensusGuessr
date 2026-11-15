@@ -47,7 +47,7 @@ GAZ_URL = (
 )
 
 PLACE_PREFIX = "1600000US"  # summary level 160 (state-place), geographic component 00
-TABLES = ["b01003", "b01002", "b08301", "b25077", "b04006", "b05002", "b25035"]
+TABLES = ["b01003", "b01002", "b08301", "b25077", "b05002", "b25035"]
 
 # Labels we rely on, checked against the official table shells on every run so a
 # renumbered table in a future release fails loudly instead of silently.
@@ -59,18 +59,15 @@ EXPECTED_LABELS = {
     "B08301_018": "Bicycle",
     "B08301_021": "Worked from home",
     "B25077_001": "Median value (dollars)",
-    "B04006_001": "Total:",
-    "B04006_108": "Other groups",
-    "B04006_109": "Unclassified or not reported",
     "B05002_001": "Total:",
     "B05002_004": "Born in other state in the United States:",
     "B25035_001": "Median year structure built",
 }
 EXPECTED_UNIVERSE = {
+    "B01003": "Total population",
     "B01002": "Total population",
     "B08301": "Workers 16 years and over",
     "B25077": "Owner-occupied housing units",
-    "B04006": "Total population",
     "B05002": "Total population",
     "B25035": "Housing units",
 }
@@ -209,28 +206,6 @@ def verify_shells(shells: dict[str, dict]) -> None:
             sys.exit(f"Universe mismatch for {table}: expected {universe!r}, got {got!r}")
 
 
-def ancestry_candidates(shells: dict[str, dict]) -> dict[str, str]:
-    """Top-level (indent 1) B04006 lines, minus the two residual lines.
-
-    Group subtotals (Arab, Subsaharan African, West Indian) compete as one
-    category each; their indent-2 components are not separate candidates.
-    """
-    out = {}
-    for uid, row in shells.items():
-        if row["Table ID"] != "B04006" or row["Indent"] != "1":
-            continue
-        if uid in ("B04006_108", "B04006_109"):
-            continue
-        label = row["Label"].strip().rstrip(":")
-        label = {
-            "French (except Basque)": "French",
-            "West Indian (except Hispanic groups)": "West Indian",
-            "Subsaharan African": "Sub-Saharan African",
-        }.get(label, label)
-        out[uid] = label
-    return out
-
-
 def load_gazetteer() -> dict[str, dict]:
     cache = CACHE / f"{GAZETTEER_YEAR}_Gaz_place_national.zip"
     if not cache.exists():
@@ -313,7 +288,6 @@ def load_featured() -> list[tuple[str, str]]:
 def main() -> None:
     shells = load_shells()
     verify_shells(shells)
-    ancestries = ancestry_candidates(shells)
     gaz = load_gazetteer()
 
     data = {}
@@ -370,7 +344,6 @@ def main() -> None:
         age = val(geoid, "B01002_001")
         home = val(geoid, "B25077_001")
         built = val(geoid, "B25035_001")
-        counts = {uid: val(geoid, uid) for uid in ancestries}
 
         missing = [
             label
@@ -379,7 +352,6 @@ def main() -> None:
                 ("work from home share", bool(workers) and wfh is not None),
                 ("median home value", home is not None),
                 ("bike/transit share", bool(workers) and transit is not None and bike is not None),
-                ("ancestry", all(v is not None for v in counts.values()) and max(counts.values()) > 0),
                 ("born in another state share", bool(total) and other_state is not None),
                 ("median year built", built is not None and built > 0),
             ]
@@ -389,8 +361,6 @@ def main() -> None:
             drop("missing or suppressed: " + ", ".join(missing))
             continue
 
-        # Highest estimate wins; ties broken by table line order for determinism.
-        top_uid = max(sorted(counts), key=lambda u: counts[u])
         try:
             lat, lon = float(g["INTPTLAT"]), float(g["INTPTLONG"])
         except (KeyError, ValueError):
@@ -413,7 +383,6 @@ def main() -> None:
                 # renders the cap with a trailing plus sign.
                 "homeValue": min(int(home), HOME_VALUE_CAP),
                 "transitBikePct": round(100 * (transit + bike) / workers, 1),
-                "ancestry": ancestries[top_uid],
                 "otherStatePct": round(100 * other_state / total, 1),
                 # ACS bottom-codes this median; anything at or below 1939 means
                 # "1939 or earlier" and is stored as 1939 (the app shows it that way).

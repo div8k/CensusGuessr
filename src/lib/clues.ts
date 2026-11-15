@@ -8,7 +8,9 @@ export interface Clue {
   value: (c: City) => string;
   /** Unit / denominator, shown small next to the value. */
   unit: string;
-  /** Median across the whole city pool, for context. Null when not numeric. */
+  /** Where the value ranks among the game's cities, e.g. "9th youngest of 60". */
+  rank: ((c: City) => string) | null;
+  /** Median across the game's cities, for context. Null when not numeric. */
   typical: string | null;
 }
 
@@ -19,6 +21,28 @@ function median(pick: (c: City) => number): number {
   const v = CITIES.map(pick).sort((a, b) => a - b);
   const mid = v.length >> 1;
   return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
+}
+
+export function ordinal(n: number): string {
+  const tens = n % 100;
+  const suffix = tens >= 11 && tens <= 13 ? 'th' : (['th', 'st', 'nd', 'rd'][n % 10] ?? 'th');
+  return `${n}${suffix}`;
+}
+
+/**
+ * Rank among the game's cities, counted from whichever end is nearer:
+ * "Highest of 60", "3rd highest of 60", "9th lowest of 60". Ties share a rank.
+ */
+function ranker(pick: (c: City) => number, high: string, low: string): (c: City) => string {
+  const values = CITIES.map(pick);
+  return (c) => {
+    const v = pick(c);
+    const above = values.filter((x) => x > v).length;
+    const below = values.filter((x) => x < v).length;
+    const [place, word] = above <= below ? [above + 1, high] : [below + 1, low];
+    const text = place === 1 ? word : `${ordinal(place)} ${word}`;
+    return `${text[0].toUpperCase()}${text.slice(1)} of ${values.length}`;
+  };
 }
 
 export const HOME_VALUE_CAP = 2_000_000;
@@ -34,6 +58,7 @@ export const CLUES: Clue[] = [
     label: 'Median age',
     value: (c) => c.medianAge.toFixed(1),
     unit: 'years',
+    rank: ranker((c) => c.medianAge, 'oldest', 'youngest'),
     typical: median((c) => c.medianAge).toFixed(1),
   },
   {
@@ -41,6 +66,7 @@ export const CLUES: Clue[] = [
     label: 'Work from home',
     value: (c) => pct(c.wfhPct),
     unit: 'of workers',
+    rank: ranker((c) => c.wfhPct, 'highest', 'lowest'),
     typical: pct(median((c) => c.wfhPct)),
   },
   {
@@ -48,6 +74,7 @@ export const CLUES: Clue[] = [
     label: 'Median home value',
     value: (c) => homeValue(c.homeValue),
     unit: 'owner-occupied homes',
+    rank: ranker((c) => c.homeValue, 'most expensive', 'least expensive'),
     typical: homeValue(Math.round(median((c) => c.homeValue) / 100) * 100),
   },
   {
@@ -55,20 +82,23 @@ export const CLUES: Clue[] = [
     label: 'Bike or public transit to work',
     value: (c) => pct(c.transitBikePct),
     unit: 'of workers',
+    rank: ranker((c) => c.transitBikePct, 'highest', 'lowest'),
     typical: pct(median((c) => c.transitBikePct)),
   },
   {
-    key: 'ancestry',
-    label: 'Most common reported ancestry',
-    value: (c) => c.ancestry,
-    unit: '',
-    typical: null,
+    key: 'pop',
+    label: 'Population',
+    value: (c) => c.pop.toLocaleString('en-US'),
+    unit: 'residents',
+    rank: ranker((c) => c.pop, 'largest', 'smallest'),
+    typical: (Math.round(median((c) => c.pop) / 1000) * 1000).toLocaleString('en-US'),
   },
   {
     key: 'otherStatePct',
     label: 'Born in a different U.S. state',
     value: (c) => pct(c.otherStatePct),
     unit: 'of residents',
+    rank: ranker((c) => c.otherStatePct, 'highest', 'lowest'),
     typical: pct(median((c) => c.otherStatePct)),
   },
   {
@@ -76,6 +106,7 @@ export const CLUES: Clue[] = [
     label: 'Median year housing was built',
     value: (c) => yearBuilt(c.yearBuilt),
     unit: '',
+    rank: ranker((c) => c.yearBuilt, 'newest', 'oldest'),
     typical: yearBuilt(Math.round(median((c) => c.yearBuilt))),
   },
   {
@@ -83,6 +114,7 @@ export const CLUES: Clue[] = [
     label: 'Census region',
     value: (c) => c.region,
     unit: '',
+    rank: null,
     typical: null,
   },
 ];

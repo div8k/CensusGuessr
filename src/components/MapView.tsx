@@ -3,7 +3,6 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { feature } from 'topojson-client';
 import type { GeometryCollection, Topology } from 'topojson-specification';
-import statesTopology from 'us-atlas/states-10m.json';
 import { cityLabel } from '../lib/cities';
 import { haversineKm } from '../lib/geo';
 import type { City } from '../lib/types';
@@ -24,9 +23,19 @@ const CITY_ZOOM = 10;
 /** Beyond this distance the camera pulls back to show both cities before flying on. */
 const PULL_BACK_KM = 150;
 
+/** A wrong guess shown on the map with how far off it was and which way to go. */
+export interface MissPin {
+  city: City;
+  n: number;
+  km: number;
+  arrow: string;
+}
+
 export interface MapHandle {
   /** Show (or clear) the preview pin for the currently selected suggestion. */
   preview(city: City | null): void;
+  /** Mark a wrong guess. `move` brings it into view. */
+  addMiss(miss: MissPin, move: boolean): void;
   /** Play the reveal: zoom to the guess, then fly to the answer, then frame both. */
   reveal(guess: City, answer: City): void;
   /** Jump straight to the end of the reveal. */
@@ -37,6 +46,8 @@ export interface MapHandle {
 
 interface Props {
   initialPreview: City | null;
+  /** Wrong guesses already made in this round (restored or revisited). */
+  initialMisses: MissPin[];
   /** When set, the map mounts in its finished state (restored or revisited round). */
   initialFinal: { guess: City; answer: City } | null;
   reducedMotion: boolean;
@@ -44,7 +55,7 @@ interface Props {
   onRevealDone: () => void;
 }
 
-type PinKind = 'preview' | 'guess' | 'answer' | 'exact';
+type PinKind = 'preview' | 'miss' | 'guess' | 'answer' | 'exact';
 
 interface Token {
   cancelled: boolean;
@@ -69,7 +80,7 @@ function pinIcon(kind: PinKind): L.DivIcon {
 }
 
 /** Label built with textContent, so no string is ever parsed as HTML. */
-function pinLabel(title: string | null, city: City): HTMLElement {
+function pinLabel(title: string | null, text: string): HTMLElement {
   const el = document.createElement('div');
   if (title) {
     const strong = document.createElement('strong');
@@ -77,10 +88,12 @@ function pinLabel(title: string | null, city: City): HTMLElement {
     el.append(strong);
   }
   const span = document.createElement('span');
-  span.textContent = cityLabel(city);
+  span.textContent = text;
   el.append(span);
   return el;
 }
+
+const km = (n: number): string => `${Math.round(n).toLocaleString('en-US')} km`;
 
 const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -93,6 +106,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
   const api = useRef<MapHandle | null>(null);
   useImperativeHandle(ref, () => ({
     preview: (c) => api.current?.preview(c),
+    addMiss: (m, move) => api.current?.addMiss(m, move),
     reveal: (g, a) => api.current?.reveal(g, a),
     skip: () => api.current?.skip(),
     viewAnswer: () => api.current?.viewAnswer(),
@@ -115,13 +129,18 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
 
     // State outlines sit beneath the tiles: they show through while tiles load
     // and keep the map usable if the tile server is unreachable.
+    // They load as a separate small file so they never delay the first screen.
     map.createPane('outline').style.zIndex = '150';
-    const topo = statesTopology as unknown as Topology;
-    L.geoJSON(feature(topo, topo.objects.states as GeometryCollection), {
-      pane: 'outline',
-      interactive: false,
-      style: { color: '#3a3a37', weight: 1, fillColor: '#121211', fillOpacity: 1 },
-    }).addTo(map);
+    let disposed = false;
+    void import('../data/us-states.json').then((mod) => {
+      if (disposed) return;
+      const topo = mod.default as unknown as Topology;
+      L.geoJSON(feature(topo, topo.objects.states as GeometryCollection), {
+        pane: 'outline',
+        interactive: false,
+        style: { color: '#3a3a37', weight: 1, fillColor: '#121211', fillOpacity: 1 },
+      }).addTo(map);
+    });
 
     let tileErrors = 0;
     let tileLoads = 0;
@@ -156,14 +175,20 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
     const fitUs = () => map.fitBounds(US_BOUNDS, { animate: false });
     fitUs();
 
-    const addPin = (city: City, kind: PinKind, title: string | null, direction: 'top' | 'bottom') => {
+    const addPin = (
+      city: City,
+      kind: PinKind,
+      title: string | null,
+      direction: 'top' | 'bottom',
+      text: string = cityLabel(city),
+    ) => {
       const marker = L.marker(at(city), {
         icon: pinIcon(kind),
         interactive: false,
         keyboard: false,
         zIndexOffset: kind === 'answer' ? 500 : 0,
       }).addTo(pins);
-      marker.bindTooltip(pinLabel(title, city), {
+      marker.bindTooltip(pinLabel(title, text), {
         permanent: true,
         direction,
         offset: [0, direction === 'top' ? -14 : 14],
@@ -176,9 +201,27 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
       previewPin?.remove();
       previewPin = null;
     };
+    const missPins = new Map<string, L.Marker>();
+    const showMiss = (miss: MissPin) => {
+      clearPreview();
+      if (missPins.has(miss.city.id)) return;
+      const text = `${cityLabel(miss.city)} · ${km(miss.km)} ${miss.arrow}`;
+      missPins.set(miss.city.id, addPin(miss.city, 'miss', `Guess ${miss.n}`, 'bottom', text));
+    };
+    const bringIntoView = (city: City) => {
+      autoFit = null;
+      const inView = map.getBounds().pad(-0.12).contains(at(city));
+      if (inView && map.getZoom() >= 4.5) return;
+      const zoom = Math.max(map.getZoom(), 5);
+      if (reduced()) map.setView(at(city), zoom, { animate: false });
+      else map.flyTo(at(city), zoom, { duration: 0.9 });
+    };
     let guessIsExact = false;
     const ensureGuess = (guess: City, exact: boolean) => {
       clearPreview();
+      // The guess that counts gets the main pin in place of its numbered one.
+      missPins.get(guess.id)?.remove();
+      missPins.delete(guess.id);
       if (guessPin && guessIsExact === exact) return;
       guessPin?.remove();
       guessIsExact = exact;
@@ -345,13 +388,12 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
         clearPreview();
         if (!city) return;
         previewPin = addPin(city, 'preview', null, 'top');
-        autoFit = null;
-        const inView = map.getBounds().pad(-0.12).contains(at(city));
-        if (!inView || map.getZoom() < 4.5) {
-          const zoom = Math.max(map.getZoom(), 5);
-          if (reduced()) map.setView(at(city), zoom, { animate: false });
-          else map.flyTo(at(city), zoom, { duration: 0.9 });
-        }
+        bringIntoView(city);
+      },
+      addMiss(miss, move) {
+        if (final || token) return;
+        showMiss(miss);
+        if (move) bringIntoView(miss.city);
       },
       reveal(guess, answer) {
         if (token) return;
@@ -399,7 +441,8 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
       },
     };
 
-    const { initialFinal, initialPreview } = live.current;
+    const { initialFinal, initialPreview, initialMisses } = live.current;
+    initialMisses.forEach(showMiss);
     if (initialFinal) showFinal(initialFinal.guess, initialFinal.answer, false);
     else if (initialPreview) api.current.preview(initialPreview);
 
@@ -424,6 +467,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(props, ref) {
     observer.observe(el);
 
     return () => {
+      disposed = true;
       observer.disconnect();
       if (token) token.cancelled = true;
       token?.wake?.();
