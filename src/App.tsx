@@ -4,10 +4,10 @@ import MapView from './components/MapView';
 import type { MapHandle } from './components/MapView';
 import { CITIES, CITY_BY_ID, META, cityLabel, cityLongLabel } from './lib/cities';
 import { CLUES } from './lib/clues';
-import { cityIdForPuzzle, nextResetMs, puzzleNumber } from './lib/daily';
+import { SCHEDULE, cityIdForPuzzle, nextResetMs, puzzleNumber } from './lib/daily';
 import { KM_PER_MILE, haversineKm } from './lib/geo';
 import { MAX_SCORE, TOTAL_CLUES, clueMultiplier, scoreGuess, shareText } from './lib/scoring';
-import { loadDaily, saveDaily } from './lib/storage';
+import { loadDaily, saveDaily, visitorId } from './lib/storage';
 import { now } from './lib/time';
 import type { City, Result } from './lib/types';
 
@@ -28,7 +28,7 @@ interface Round {
 const int = (n: number): string => Math.round(n).toLocaleString('en-US');
 
 function dailyRound(puzzle: number): Round {
-  const answerId = cityIdForPuzzle(puzzle);
+  const answerId = cityIdForPuzzle(puzzle, SCHEDULE, visitorId());
   const saved = loadDaily(puzzle, answerId);
   return {
     key: `daily-${puzzle}`,
@@ -485,8 +485,8 @@ export default function App() {
           guess on the first clue earns 5,000.
         </p>
         <p>
-          The Daily Challenge is the same city for everyone and resets at 00:00 UTC. Practice is
-          unlimited.
+          A new Daily Challenge starts at 00:00 UTC. The cities come in a different shuffled order
+          for every player, so your city today is your own. Practice is unlimited.
         </p>
         <p className="fineprint">
           The game uses {META.count} of the largest and best-known U.S. cities. Clues are{' '}

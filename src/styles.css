@@ -610,6 +610,18 @@ input {
   color: var(--faint);
 }
 
+/* The clue cost sits on its own line so it can never spill out of the button. */
+.actions:not(.actions-wrap) .btn {
+  white-space: normal;
+}
+
+.actions:not(.actions-wrap) .btn small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.58rem;
+  white-space: nowrap;
+}
+
 .btn:hover:not(:disabled) {
   border-color: var(--ink);
   background: var(--ink);

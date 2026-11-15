@@ -68,6 +68,17 @@ describe('daily schedule', () => {
     expect(cityIdForPuzzle(7)).toBe(ids[6]);
     expect(Array.from({ length: n }, (_, i) => cityIdForPuzzle(n + i + 1))).not.toEqual(ids);
   });
+  it('gives each visitor their own order, stable for that visitor', () => {
+    const n = SCHEDULE.versions[0].pool.length;
+    const order = (v: string) => Array.from({ length: n }, (_, i) => cityIdForPuzzle(i + 1, SCHEDULE, v));
+    const a = order('00112233aabbccdd');
+    const b = order('ffeeddcc99887766');
+    expect(a).toEqual(order('00112233aabbccdd'));
+    expect(a).not.toEqual(b);
+    expect(new Set(a).size).toBe(n);
+    expect(new Set(b).size).toBe(n);
+    expect([...a].sort()).toEqual([...b].sort());
+  });
   it('keeps past puzzles when a new schedule version is appended', () => {
     const next: Schedule = {
       ...SCHEDULE,

@@ -6,6 +6,34 @@ const KEY = 'censusguessr.daily.v1';
 /** Half the Earth's circumference: no two points are farther apart. */
 const MAX_DISTANCE_KM = 20_100;
 
+const VISITOR_KEY = 'censusguessr.visitor.v1';
+const VISITOR_ID = /^[0-9a-f]{16}$/;
+let visitor: string | null = null;
+
+function randomId(): string {
+  const bytes = new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * A random id for this browser, used only to shuffle the city order for this
+ * player. It never leaves the device. If storage is unavailable the id lasts
+ * for the page visit.
+ */
+export function visitorId(): string {
+  if (visitor) return visitor;
+  try {
+    const saved = localStorage.getItem(VISITOR_KEY);
+    if (saved && VISITOR_ID.test(saved)) return (visitor = saved);
+    visitor = randomId();
+    localStorage.setItem(VISITOR_KEY, visitor);
+  } catch {
+    visitor ??= randomId();
+  }
+  return visitor;
+}
+
 export interface DailySave {
   puzzle: number;
   answerId: string;

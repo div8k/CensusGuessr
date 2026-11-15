@@ -3,7 +3,8 @@
 Identify a famous U.S. city from Census clues, then watch the map fly from your guess to the
 answer. The pool is 60 of the largest and best-known cities, from New York to Honolulu.
 
-- **Daily Challenge** — one city a day, the same for everyone, resetting at 00:00 UTC.
+- **Daily Challenge** — one city a day, resetting at 00:00 UTC. Every player gets the cities in
+  their own shuffled order.
 - **Practice** — unlimited random rounds.
 - Static site: React + TypeScript + Vite + Leaflet. No backend, no API keys, no live Census calls.
 
@@ -193,7 +194,12 @@ shortened (Nashville-Davidson → Nashville, Urban Honolulu → Honolulu); the o
 - [`src/data/schedule.json`](src/data/schedule.json) holds versioned schedules. Each version
   freezes its own pool of GEOIDs and a seed; puzzle *n* is the *n*-th city of a seeded shuffle of
   that pool (reshuffled after each full pass). The answer therefore depends only on the puzzle
-  number and the schedule, not on the current data file.
+  number, the schedule and the player, not on the current data file.
+- **Each player has their own order.** On a first visit the browser makes a random 16-character
+  id and keeps it in `localStorage` (`censusguessr.visitor.v1`). The id is mixed into the shuffle
+  seed, so two players see different cities on the same day, while one player always gets the
+  same city for a given puzzle number and never repeats a city within a pass. The id is not
+  sent anywhere. Clearing site data, or using another browser or device, starts a new order.
 - `npm run data` never rewrites the schedule. If a data refresh adds or removes cities, append a
   new entry to `versions` with the next `version`, a new `seed`, the new `pool`, and a
   `startPuzzle` in the future. Earlier puzzle numbers keep their cities (covered by a unit test).
@@ -221,7 +227,8 @@ the URL forces the same behaviour.
 ## Security
 
 The game is a static page with no server, accounts, cookies, analytics or API keys. The only
-thing it stores is your Daily Challenge progress, in your own browser's `localStorage`.
+things it stores are your Daily Challenge progress and a random id that sets your city order,
+both in your own browser's `localStorage`. Neither is sent anywhere.
 
 - **Content Security Policy.** The production page only runs its own script, and may load
   images from one outside host: the map tile server. Nothing else can be loaded or contacted.
@@ -244,6 +251,8 @@ To report a problem, open an issue on the repository.
 - The ancestry clue cannot return groups the Census folds into "Other groups" (see above).
 - The daily puzzle is computed in the browser, so the answer is discoverable by reading the code,
   and a player's clock decides which puzzle they see.
+- Because each player has their own city order, a shared result (`#42`) names the day, not a
+  city that others also played.
 
 ## License
 

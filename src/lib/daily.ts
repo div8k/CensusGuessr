@@ -61,12 +61,15 @@ function shuffled<T>(items: readonly T[], seed: string): T[] {
 /**
  * City GEOID for a puzzle number. Each schedule version plays through a seeded
  * shuffle of its frozen pool, reshuffling after every full pass, so the answer
- * depends only on (puzzle number, schedule) — never on the current data file.
+ * depends only on (puzzle number, schedule, visitor) — never on the current
+ * data file. `visitor` is a per-browser random id: every player gets the cities
+ * in their own order, and the same player always gets the same order.
  */
-export function cityIdForPuzzle(puzzle: number, s: Schedule = SCHEDULE): string {
+export function cityIdForPuzzle(puzzle: number, s: Schedule = SCHEDULE, visitor = ''): string {
   let version = s.versions[0];
   for (const v of s.versions) if (v.startPuzzle <= puzzle) version = v;
   const index = Math.max(0, puzzle - version.startPuzzle);
   const cycle = Math.floor(index / version.pool.length);
-  return shuffled(version.pool, `${version.seed}:${cycle}`)[index % version.pool.length];
+  const seed = `${version.seed}:${cycle}${visitor ? `:${visitor}` : ''}`;
+  return shuffled(version.pool, seed)[index % version.pool.length];
 }
