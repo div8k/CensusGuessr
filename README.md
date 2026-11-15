@@ -1,6 +1,7 @@
 # 🏙️ CensusGuessr
 
-Identify a U.S. city from Census clues, then watch the map fly from your guess to the answer.
+Identify a famous U.S. city from Census clues, then watch the map fly from your guess to the
+answer. The pool is 60 of the largest and best-known cities, from New York to Honolulu.
 
 - **Daily Challenge** — one city a day, the same for everyone, resetting at 00:00 UTC.
 - **Practice** — unlimited random rounds.
@@ -8,8 +9,8 @@ Identify a U.S. city from Census clues, then watch the map fly from your guess t
 
 ## How it plays
 
-1. The first clue is visible. Search for a city (the list shows city and state, so the three
-   Springfields stay distinct) and pick one to drop a preview pin, or **Reveal next clue**.
+1. The first clue is visible. Search for a city (the list shows city and state, so same-named
+   cities stay distinct) and pick one to drop a preview pin, or **Reveal next clue**.
 2. Up to eight clues appear in this order: median age, work-from-home share, median home value,
    bike-or-transit commute share, most common reported ancestry, share born in a different U.S.
    state, median year housing was built, Census region. Revealing a clue never moves the map.
@@ -92,7 +93,8 @@ configuration.
    ```
 2. In the repository, open **Settings → Pages** and set **Source** to **GitHub Actions**.
 3. Every push to `main` runs `.github/workflows/deploy.yml`: `npm ci`, a dependency
-   vulnerability and signature check, `npm test`, `npm run build`, then publishes `dist/`.
+   vulnerability and signature check, `npm test`, `npm run build` and the full security scan.
+   Only if all of that passes does it publish `dist/`.
 4. The game appears at `https://<user>.github.io/<repo>/` a minute or two later.
 
 ## Data
@@ -152,7 +154,8 @@ Population for the 100,000 threshold is `B01003_001` from the same release.
   people born in Puerto Rico, the U.S. Island Areas or abroad to American parents, and the
   foreign-born. The numerator is *not* `_003`, which is "Born in state of residence".
 - **Bottom/top codes.** A median year built at or below 1939 is stored as 1939 and shown as
-  "1939 or earlier" (5 cities). A median home value at the $2,000,000 top code would be shown as
+  "1939 or earlier" (Buffalo and St. Louis in the current pool). A median home value at the
+  $2,000,000 top code would be shown as
   "$2,000,000+" (none currently).
 
 ### Pool and exclusions
@@ -161,15 +164,25 @@ Population for the 100,000 threshold is `B01003_001` from the same release.
 |---|---|
 | Places in ACS 2020–2024 (summary level 160) | 32,330 |
 | With at least 100,000 residents | 351 |
-| Excluded | 4 |
-| **Playable cities** | **347** |
+| Excluded for a missing clue value | 4 |
+| Eligible | 347 |
+| Not on the featured list | 287 |
+| **Playable cities** | **60** |
+
+The game only uses famous cities, to keep it fun rather than obscure. The list is editorial and
+lives in [`data/featured_cities.csv`](data/featured_cities.csv): the biggest cities by
+population plus well-known destinations such as New Orleans, Honolulu, Orlando, Savannah and
+Charleston. Every featured city must first pass the same checks as any other place (100,000+
+residents and valid values for all eight clues), or `npm run data` fails. To widen or narrow the
+pool, edit that file and re-run the script, then add a schedule version (see below).
 
 The four exclusions are Puerto Rico's *zonas urbanas* (San Juan, Bayamón, Carolina, Ponce):
 Puerto Rico is not assigned to a Census region, so they have no value for the eighth clue. No
-place was dropped for a missing or suppressed estimate. The machine-readable report is
-[`data/exclusions.json`](data/exclusions.json).
+place was dropped for a missing or suppressed estimate. The machine-readable report, including
+the 287 eligible places that are not featured, is [`data/exclusions.json`](data/exclusions.json).
 
-"Named places" includes census-designated places such as Arlington, VA and Paradise, NV. Display
+"Named places" includes census-designated places (Honolulu is one). Las Vegas is the city
+proper; the Strip is mostly in Paradise, a separate place that is not featured. Display
 names drop the Census suffix ("city", "CDP", "(balance)"…) and a few consolidated governments are
 shortened (Nashville-Davidson → Nashville, Urban Honolulu → Honolulu); the original is kept as
 `censusName`. The script asserts that every "City, ST" label is unique.
@@ -215,8 +228,8 @@ thing it stores is your Daily Challenge progress, in your own browser's `localSt
 - **No HTML from strings.** Everything on screen, including map labels, is rendered as text.
 - **Saved progress is untrusted input.** It is range-checked on load and discarded if malformed.
 - **Deploys.** The workflow has no default permissions, pins every action to a full commit SHA,
-  and fails if a dependency has a known high-severity vulnerability or a bad registry
-  signature. Dependabot proposes weekly updates for npm packages and actions.
+  and refuses to publish if a dependency has a known high-severity vulnerability or a bad
+  registry signature, or if any check in the security scan fails. Dependabot proposes weekly updates for npm packages and actions.
 - **`npm run scan`** repeats all of this locally: 37 checks covering dependencies, secrets,
   risky code patterns, the built page and the workflow. The exit code is the number of failures.
 

@@ -36,7 +36,7 @@ describe('haversine', () => {
     expect(haversineKm(40.7128, -74.006, 34.0522, -118.2437)).toBeLessThan(3945);
   });
   it('is symmetric', () => {
-    const [a, b] = [CITIES[0], CITIES[200]];
+    const [a, b] = [CITIES[0], CITIES[CITIES.length - 1]];
     expect(haversineKm(a.lat, a.lon, b.lat, b.lon)).toBeCloseTo(
       haversineKm(b.lat, b.lon, a.lat, a.lon),
       9,
@@ -95,19 +95,31 @@ describe('data snapshot', () => {
 describe('search', () => {
   const index = buildIndex(CITIES);
   const labels = (q: string) => searchCities(index, q).map(cityLabel);
-  it('lists every city sharing a name, with its state', () => {
-    expect(labels('springfield').sort()).toEqual([
-      'Springfield, IL',
-      'Springfield, MA',
-      'Springfield, MO',
+  it('lists every match with its state, biggest first', () => {
+    expect(labels('san')).toEqual([
+      'San Antonio, TX',
+      'San Diego, CA',
+      'San Jose, CA',
+      'San Francisco, CA',
     ]);
   });
-  it('narrows duplicates by state', () => {
-    expect(labels('springfield, mo')).toEqual(['Springfield, MO']);
+  it('narrows by state', () => {
+    expect(labels('las vegas, nv')).toEqual(['Las Vegas, NV']);
     expect(labels('Portland Oregon')).toEqual(['Portland, OR']);
   });
   it('ignores punctuation and case', () => {
     expect(labels('st louis')).toContain('St. Louis, MO');
-    expect(labels('WINSTON salem')).toEqual(['Winston-Salem, NC']);
+    expect(labels('NEW orleans')).toEqual(['New Orleans, LA']);
+  });
+  it('tells same-named cities apart by state', () => {
+    const twins = buildIndex([
+      { ...CITIES[0], id: 'a', name: 'Springfield', state: 'IL', stateName: 'Illinois' },
+      { ...CITIES[0], id: 'b', name: 'Springfield', state: 'MO', stateName: 'Missouri' },
+    ]);
+    expect(searchCities(twins, 'springfield').map(cityLabel).sort()).toEqual([
+      'Springfield, IL',
+      'Springfield, MO',
+    ]);
+    expect(searchCities(twins, 'springfield, mo').map(cityLabel)).toEqual(['Springfield, MO']);
   });
 });

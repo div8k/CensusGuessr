@@ -31,6 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / ".cache"
 OUT = ROOT / "src" / "data" / "cities.json"
 REPORT = ROOT / "data" / "exclusions.json"
+FEATURED = ROOT / "data" / "featured_cities.csv"
 SCHEDULE = ROOT / "src" / "data" / "schedule.json"
 SCHEDULE_EPOCH_UTC = "2026-11-14"  # 00:00 UTC on this date starts puzzle #1
 
@@ -295,6 +296,20 @@ def check_schedule(ids: list[str]) -> None:
         )
 
 
+def load_featured() -> list[tuple[str, str]]:
+    """The editorial list of well-known cities, as (display name, USPS state)."""
+    out = []
+    for line in FEATURED.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        name, state = line.rsplit(",", 1)
+        out.append((name.strip(), state.strip()))
+    if len(out) != len(set(out)):
+        sys.exit(f"Duplicate entries in {FEATURED.name}")
+    return out
+
+
 def main() -> None:
     shells = load_shells()
     verify_shells(shells)
@@ -407,6 +422,22 @@ def main() -> None:
             }
         )
 
+    # Keep only the featured (famous) cities. Every featured city must already
+    # have passed the population and data checks above, or the run fails.
+    eligible = len(cities)
+    featured = load_featured()
+    by_label = {(c["name"], c["state"]): c for c in cities}
+    unknown = [f"{n}, {s}" for n, s in featured if (n, s) not in by_label]
+    if unknown:
+        sys.exit(f"Featured cities not found among eligible places: {unknown}")
+    wanted = set(featured)
+    not_featured = [
+        {"geoid": c["id"], "name": c["censusName"], "population": c["pop"]}
+        for c in cities
+        if (c["name"], c["state"]) not in wanted
+    ]
+    cities = [c for c in cities if (c["name"], c["state"]) in wanted]
+
     # Validation of the snapshot itself.
     ids = [c["id"] for c in cities]
     assert len(ids) == len(set(ids)), "duplicate GEOIDs"
@@ -435,6 +466,8 @@ def main() -> None:
             "placesInAcs": total_places,
             "candidates": len(candidates),
             "excluded": len(excluded),
+            "eligible": eligible,
+            "notFeatured": len(not_featured),
             "count": len(cities),
         },
         "cities": cities,
@@ -445,7 +478,9 @@ def main() -> None:
         f.write(",\n".join(json.dumps(c, separators=(",", ":"), ensure_ascii=False) for c in cities))
         f.write("\n]}\n")
     REPORT.parent.mkdir(parents=True, exist_ok=True)
-    REPORT.write_text(json.dumps({"meta": snapshot["meta"], "excluded": excluded}, indent=2) + "\n")
+    REPORT.write_text(json.dumps(
+            {"meta": snapshot["meta"], "excluded": excluded, "notFeatured": not_featured}, indent=2
+        ) + "\n")
 
     check_schedule([c["id"] for c in cities])
 
@@ -454,6 +489,8 @@ def main() -> None:
     print(f"Excluded: {len(excluded)}")
     for e in excluded:
         print(f"  - {e['name']} ({e['geoid']}, pop {e['population']:,}): {e['reason']}")
+    print(f"Eligible (all eight clues valid): {eligible}")
+    print(f"Not on the featured list ({FEATURED.relative_to(ROOT)}): {len(not_featured)}")
     print(f"Resulting pool: {len(cities)} cities -> {OUT.relative_to(ROOT)}")
 
 

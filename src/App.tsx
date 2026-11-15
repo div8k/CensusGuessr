@@ -332,7 +332,7 @@ export default function App() {
                     {clue.value(answer)}
                     {clue.unit && <small> {clue.unit}</small>}
                   </div>
-                  {clue.typical && <div className="clue-note">Typical big city: {clue.typical}</div>}
+                  {clue.typical && <div className="clue-note">Typical city in the game: {clue.typical}</div>}
                 </li>
               );
             })}
@@ -473,7 +473,7 @@ export default function App() {
       <dialog ref={helpRef} className="help" aria-labelledby="help-title">
         <h2 id="help-title">How to play</h2>
         <ol>
-          <li>Read the clue. Every clue is a real Census statistic about one U.S. city.</li>
+          <li>Read the clue. Every clue is a real Census statistic about one famous U.S. city.</li>
           <li>
             Search for a city and pick it from the list to pin it on the map, or reveal another clue.
             Each extra clue lowers the maximum score by 10%.
@@ -489,8 +489,8 @@ export default function App() {
           unlimited.
         </p>
         <p className="fineprint">
-          {META.count} cities: Census places with at least {int(META.minPopulation)} residents. Clues
-          are {META.acs.release} estimates from the U.S. Census Bureau; coordinates are from the{' '}
+          The game uses {META.count} of the largest and best-known U.S. cities. Clues are{' '}
+          {META.acs.release} estimates from the U.S. Census Bureau; coordinates are from the{' '}
           {META.gazetteer.year} Census Gazetteer. “Most common ancestry” is the largest single
           ancestry group people reported, and excludes the Census’s combined “Other groups” category.
           This product uses Census Bureau data but is not endorsed or certified by the Census Bureau.

@@ -1,0 +1,63 @@
+# The cities the game uses: the largest and best-known U.S. cities.
+# One "City,ST" per line, using the game's display names. Edit this list and
+# run `npm run data` to change the pool (see README, "Pool and exclusions").
+New York,NY
+Los Angeles,CA
+Chicago,IL
+Houston,TX
+Phoenix,AZ
+Philadelphia,PA
+San Antonio,TX
+San Diego,CA
+Dallas,TX
+San Jose,CA
+Austin,TX
+Jacksonville,FL
+Fort Worth,TX
+Columbus,OH
+Charlotte,NC
+Indianapolis,IN
+San Francisco,CA
+Seattle,WA
+Denver,CO
+Washington,DC
+Nashville,TN
+Oklahoma City,OK
+El Paso,TX
+Boston,MA
+Portland,OR
+Las Vegas,NV
+Detroit,MI
+Memphis,TN
+Louisville,KY
+Baltimore,MD
+Milwaukee,WI
+Albuquerque,NM
+Tucson,AZ
+Sacramento,CA
+Kansas City,MO
+Atlanta,GA
+Miami,FL
+Raleigh,NC
+Omaha,NE
+Minneapolis,MN
+Tulsa,OK
+Tampa,FL
+New Orleans,LA
+Cleveland,OH
+Honolulu,HI
+Orlando,FL
+Pittsburgh,PA
+Cincinnati,OH
+St. Louis,MO
+Anchorage,AK
+Salt Lake City,UT
+Buffalo,NY
+Richmond,VA
+Boise,ID
+Savannah,GA
+Charleston,SC
+Oakland,CA
+Virginia Beach,VA
+Anaheim,CA
+Fort Lauderdale,FL

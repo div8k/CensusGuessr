@@ -13,7 +13,9 @@
     "placesInAcs": 32330,
     "candidates": 351,
     "excluded": 4,
-    "count": 347
+    "eligible": 347,
+    "notFeatured": 287,
+    "count": 60
   },
   "excluded": [
     {
@@ -39,6 +41,1443 @@
       "name": "San Juan zona urbana",
       "population": 317995,
       "reason": "state-equivalent is not assigned to a Census region (Puerto Rico)"
+    }
+  ],
+  "notFeatured": [
+    {
+      "geoid": "0107000",
+      "name": "Birmingham city",
+      "population": 198173
+    },
+    {
+      "geoid": "0137000",
+      "name": "Huntsville city",
+      "population": 222791
+    },
+    {
+      "geoid": "0150000",
+      "name": "Mobile city",
+      "population": 203416
+    },
+    {
+      "geoid": "0151000",
+      "name": "Montgomery city",
+      "population": 197494
+    },
+    {
+      "geoid": "0177256",
+      "name": "Tuscaloosa city",
+      "population": 111038
+    },
+    {
+      "geoid": "0407940",
+      "name": "Buckeye city",
+      "population": 104923
+    },
+    {
+      "geoid": "0412000",
+      "name": "Chandler city",
+      "population": 280136
+    },
+    {
+      "geoid": "0427400",
+      "name": "Gilbert town",
+      "population": 280262
+    },
+    {
+      "geoid": "0427820",
+      "name": "Glendale city",
+      "population": 252833
+    },
+    {
+      "geoid": "0428380",
+      "name": "Goodyear city",
+      "population": 107645
+    },
+    {
+      "geoid": "0446000",
+      "name": "Mesa city",
+      "population": 511764
+    },
+    {
+      "geoid": "0454050",
+      "name": "Peoria city",
+      "population": 196906
+    },
+    {
+      "geoid": "0464210",
+      "name": "San Tan Valley CDP",
+      "population": 109189
+    },
+    {
+      "geoid": "0465000",
+      "name": "Scottsdale city",
+      "population": 243821
+    },
+    {
+      "geoid": "0471510",
+      "name": "Surprise city",
+      "population": 154948
+    },
+    {
+      "geoid": "0473000",
+      "name": "Tempe city",
+      "population": 188065
+    },
+    {
+      "geoid": "0485540",
+      "name": "Yuma city",
+      "population": 100139
+    },
+    {
+      "geoid": "0541000",
+      "name": "Little Rock city",
+      "population": 203436
+    },
+    {
+      "geoid": "0602252",
+      "name": "Antioch city",
+      "population": 116477
+    },
+    {
+      "geoid": "0603526",
+      "name": "Bakersfield city",
+      "population": 411986
+    },
+    {
+      "geoid": "0606000",
+      "name": "Berkeley city",
+      "population": 120257
+    },
+    {
+      "geoid": "0608954",
+      "name": "Burbank city",
+      "population": 104546
+    },
+    {
+      "geoid": "0611194",
+      "name": "Carlsbad city",
+      "population": 114373
+    },
+    {
+      "geoid": "0613014",
+      "name": "Chico city",
+      "population": 102188
+    },
+    {
+      "geoid": "0613392",
+      "name": "Chula Vista city",
+      "population": 276375
+    },
+    {
+      "geoid": "0614218",
+      "name": "Clovis city",
+      "population": 124725
+    },
+    {
+      "geoid": "0616000",
+      "name": "Concord city",
+      "population": 124035
+    },
+    {
+      "geoid": "0616350",
+      "name": "Corona city",
+      "population": 159670
+    },
+    {
+      "geoid": "0616532",
+      "name": "Costa Mesa city",
+      "population": 110330
+    },
+    {
+      "geoid": "0617918",
+      "name": "Daly City city",
+      "population": 101964
+    },
+    {
+      "geoid": "0619766",
+      "name": "Downey city",
+      "population": 110939
+    },
+    {
+      "geoid": "0620802",
+      "name": "East Los Angeles CDP",
+      "population": 111647
+    },
+    {
+      "geoid": "0621712",
+      "name": "El Cajon city",
+      "population": 104449
+    },
+    {
+      "geoid": "0622020",
+      "name": "Elk Grove city",
+      "population": 179155
+    },
+    {
+      "geoid": "0622230",
+      "name": "El Monte city",
+      "population": 106109
+    },
+    {
+      "geoid": "0622804",
+      "name": "Escondido city",
+      "population": 149668
+    },
+    {
+      "geoid": "0623182",
+      "name": "Fairfield city",
+      "population": 120785
+    },
+    {
+      "geoid": "0624680",
+      "name": "Fontana city",
+      "population": 214169
+    },
+    {
+      "geoid": "0626000",
+      "name": "Fremont city",
+      "population": 228295
+    },
+    {
+      "geoid": "0627000",
+      "name": "Fresno city",
+      "population": 545970
+    },
+    {
+      "geoid": "0628000",
+      "name": "Fullerton city",
+      "population": 140968
+    },
+    {
+      "geoid": "0629000",
+      "name": "Garden Grove city",
+      "population": 170964
+    },
+    {
+      "geoid": "0630000",
+      "name": "Glendale city",
+      "population": 190748
+    },
+    {
+      "geoid": "0633000",
+      "name": "Hayward city",
+      "population": 158801
+    },
+    {
+      "geoid": "0633434",
+      "name": "Hesperia city",
+      "population": 100775
+    },
+    {
+      "geoid": "0636000",
+      "name": "Huntington Beach city",
+      "population": 195240
+    },
+    {
+      "geoid": "0636546",
+      "name": "Inglewood city",
+      "population": 104569
+    },
+    {
+      "geoid": "0636770",
+      "name": "Irvine city",
+      "population": 311690
+    },
+    {
+      "geoid": "0637692",
+      "name": "Jurupa Valley city",
+      "population": 107011
+    },
+    {
+      "geoid": "0640130",
+      "name": "Lancaster city",
+      "population": 169169
+    },
+    {
+      "geoid": "0643000",
+      "name": "Long Beach city",
+      "population": 455548
+    },
+    {
+      "geoid": "0646842",
+      "name": "Menifee city",
+      "population": 110305
+    },
+    {
+      "geoid": "0648354",
+      "name": "Modesto city",
+      "population": 219215
+    },
+    {
+      "geoid": "0649270",
+      "name": "Moreno Valley city",
+      "population": 211666
+    },
+    {
+      "geoid": "0650076",
+      "name": "Murrieta city",
+      "population": 112064
+    },
+    {
+      "geoid": "0653322",
+      "name": "Oceanside city",
+      "population": 172242
+    },
+    {
+      "geoid": "0653896",
+      "name": "Ontario city",
+      "population": 180547
+    },
+    {
+      "geoid": "0653980",
+      "name": "Orange city",
+      "population": 138266
+    },
+    {
+      "geoid": "0654652",
+      "name": "Oxnard city",
+      "population": 200928
+    },
+    {
+      "geoid": "0655156",
+      "name": "Palmdale city",
+      "population": 164634
+    },
+    {
+      "geoid": "0656000",
+      "name": "Pasadena city",
+      "population": 136969
+    },
+    {
+      "geoid": "0658072",
+      "name": "Pomona city",
+      "population": 147943
+    },
+    {
+      "geoid": "0659451",
+      "name": "Rancho Cucamonga city",
+      "population": 175411
+    },
+    {
+      "geoid": "0660466",
+      "name": "Rialto city",
+      "population": 104143
+    },
+    {
+      "geoid": "0660620",
+      "name": "Richmond city",
+      "population": 115505
+    },
+    {
+      "geoid": "0662000",
+      "name": "Riverside city",
+      "population": 319069
+    },
+    {
+      "geoid": "0662938",
+      "name": "Roseville city",
+      "population": 155955
+    },
+    {
+      "geoid": "0664224",
+      "name": "Salinas city",
+      "population": 161761
+    },
+    {
+      "geoid": "0665000",
+      "name": "San Bernardino city",
+      "population": 222724
+    },
+    {
+      "geoid": "0665042",
+      "name": "San Buenaventura (Ventura) city",
+      "population": 109857
+    },
+    {
+      "geoid": "0668252",
+      "name": "San Mateo city",
+      "population": 103105
+    },
+    {
+      "geoid": "0669000",
+      "name": "Santa Ana city",
+      "population": 312534
+    },
+    {
+      "geoid": "0669084",
+      "name": "Santa Clara city",
+      "population": 130256
+    },
+    {
+      "geoid": "0669088",
+      "name": "Santa Clarita city",
+      "population": 230221
+    },
+    {
+      "geoid": "0669196",
+      "name": "Santa Maria city",
+      "population": 110462
+    },
+    {
+      "geoid": "0670098",
+      "name": "Santa Rosa city",
+      "population": 177090
+    },
+    {
+      "geoid": "0672016",
+      "name": "Simi Valley city",
+      "population": 125634
+    },
+    {
+      "geoid": "0675000",
+      "name": "Stockton city",
+      "population": 322326
+    },
+    {
+      "geoid": "0677000",
+      "name": "Sunnyvale city",
+      "population": 154236
+    },
+    {
+      "geoid": "0678120",
+      "name": "Temecula city",
+      "population": 111167
+    },
+    {
+      "geoid": "0678582",
+      "name": "Thousand Oaks city",
+      "population": 125205
+    },
+    {
+      "geoid": "0680000",
+      "name": "Torrance city",
+      "population": 142130
+    },
+    {
+      "geoid": "0681554",
+      "name": "Vacaville city",
+      "population": 102596
+    },
+    {
+      "geoid": "0681666",
+      "name": "Vallejo city",
+      "population": 124268
+    },
+    {
+      "geoid": "0682590",
+      "name": "Victorville city",
+      "population": 137627
+    },
+    {
+      "geoid": "0682954",
+      "name": "Visalia city",
+      "population": 143939
+    },
+    {
+      "geoid": "0684200",
+      "name": "West Covina city",
+      "population": 107037
+    },
+    {
+      "geoid": "0803455",
+      "name": "Arvada city",
+      "population": 122634
+    },
+    {
+      "geoid": "0804000",
+      "name": "Aurora city",
+      "population": 394432
+    },
+    {
+      "geoid": "0807850",
+      "name": "Boulder city",
+      "population": 106433
+    },
+    {
+      "geoid": "0812815",
+      "name": "Centennial city",
+      "population": 108201
+    },
+    {
+      "geoid": "0816000",
+      "name": "Colorado Springs city",
+      "population": 487887
+    },
+    {
+      "geoid": "0827425",
+      "name": "Fort Collins city",
+      "population": 170229
+    },
+    {
+      "geoid": "0832155",
+      "name": "Greeley city",
+      "population": 110806
+    },
+    {
+      "geoid": "0836410",
+      "name": "Highlands Ranch CDP",
+      "population": 102257
+    },
+    {
+      "geoid": "0843000",
+      "name": "Lakewood city",
+      "population": 156583
+    },
+    {
+      "geoid": "0862000",
+      "name": "Pueblo city",
+      "population": 111561
+    },
+    {
+      "geoid": "0877290",
+      "name": "Thornton city",
+      "population": 144187
+    },
+    {
+      "geoid": "0883835",
+      "name": "Westminster city",
+      "population": 115484
+    },
+    {
+      "geoid": "0908000",
+      "name": "Bridgeport city",
+      "population": 149153
+    },
+    {
+      "geoid": "0937000",
+      "name": "Hartford city",
+      "population": 121127
+    },
+    {
+      "geoid": "0952000",
+      "name": "New Haven city",
+      "population": 134349
+    },
+    {
+      "geoid": "0973000",
+      "name": "Stamford city",
+      "population": 137144
+    },
+    {
+      "geoid": "0980000",
+      "name": "Waterbury city",
+      "population": 114869
+    },
+    {
+      "geoid": "1207300",
+      "name": "Boca Raton city",
+      "population": 100234
+    },
+    {
+      "geoid": "1208150",
+      "name": "Brandon CDP",
+      "population": 119767
+    },
+    {
+      "geoid": "1210275",
+      "name": "Cape Coral city",
+      "population": 215536
+    },
+    {
+      "geoid": "1212875",
+      "name": "Clearwater city",
+      "population": 117247
+    },
+    {
+      "geoid": "1214400",
+      "name": "Coral Springs city",
+      "population": 136103
+    },
+    {
+      "geoid": "1216475",
+      "name": "Davie town",
+      "population": 108346
+    },
+    {
+      "geoid": "1225175",
+      "name": "Gainesville city",
+      "population": 145702
+    },
+    {
+      "geoid": "1230000",
+      "name": "Hialeah city",
+      "population": 226165
+    },
+    {
+      "geoid": "1232000",
+      "name": "Hollywood city",
+      "population": 155082
+    },
+    {
+      "geoid": "1238250",
+      "name": "Lakeland city",
+      "population": 119961
+    },
+    {
+      "geoid": "1239925",
+      "name": "Lehigh Acres CDP",
+      "population": 132353
+    },
+    {
+      "geoid": "1245060",
+      "name": "Miami Gardens city",
+      "population": 113177
+    },
+    {
+      "geoid": "1245975",
+      "name": "Miramar city",
+      "population": 138600
+    },
+    {
+      "geoid": "1254000",
+      "name": "Palm Bay city",
+      "population": 130132
+    },
+    {
+      "geoid": "1255775",
+      "name": "Pembroke Pines city",
+      "population": 173194
+    },
+    {
+      "geoid": "1258050",
+      "name": "Pompano Beach city",
+      "population": 114147
+    },
+    {
+      "geoid": "1258715",
+      "name": "Port St. Lucie city",
+      "population": 232491
+    },
+    {
+      "geoid": "1260950",
+      "name": "Riverview CDP",
+      "population": 113697
+    },
+    {
+      "geoid": "1263000",
+      "name": "St. Petersburg city",
+      "population": 262732
+    },
+    {
+      "geoid": "1268350",
+      "name": "Spring Hill CDP",
+      "population": 119983
+    },
+    {
+      "geoid": "1270600",
+      "name": "Tallahassee city",
+      "population": 201875
+    },
+    {
+      "geoid": "1276600",
+      "name": "West Palm Beach city",
+      "population": 122290
+    },
+    {
+      "geoid": "1303440",
+      "name": "Athens-Clarke County unified government (balance)",
+      "population": 127345
+    },
+    {
+      "geoid": "1304204",
+      "name": "Augusta-Richmond County consolidated government (balance)",
+      "population": 201528
+    },
+    {
+      "geoid": "1319000",
+      "name": "Columbus city",
+      "population": 203711
+    },
+    {
+      "geoid": "1349008",
+      "name": "Macon-Bibb County",
+      "population": 156578
+    },
+    {
+      "geoid": "1368516",
+      "name": "Sandy Springs city",
+      "population": 107087
+    },
+    {
+      "geoid": "1372122",
+      "name": "South Fulton city",
+      "population": 110471
+    },
+    {
+      "geoid": "1652120",
+      "name": "Meridian city",
+      "population": 130138
+    },
+    {
+      "geoid": "1656260",
+      "name": "Nampa city",
+      "population": 110319
+    },
+    {
+      "geoid": "1703012",
+      "name": "Aurora city",
+      "population": 179898
+    },
+    {
+      "geoid": "1723074",
+      "name": "Elgin city",
+      "population": 114934
+    },
+    {
+      "geoid": "1738570",
+      "name": "Joliet city",
+      "population": 150445
+    },
+    {
+      "geoid": "1751622",
+      "name": "Naperville city",
+      "population": 150692
+    },
+    {
+      "geoid": "1759000",
+      "name": "Peoria city",
+      "population": 112169
+    },
+    {
+      "geoid": "1765000",
+      "name": "Rockford city",
+      "population": 147521
+    },
+    {
+      "geoid": "1772000",
+      "name": "Springfield city",
+      "population": 113330
+    },
+    {
+      "geoid": "1810342",
+      "name": "Carmel city",
+      "population": 101651
+    },
+    {
+      "geoid": "1822000",
+      "name": "Evansville city",
+      "population": 116116
+    },
+    {
+      "geoid": "1823278",
+      "name": "Fishers city",
+      "population": 102337
+    },
+    {
+      "geoid": "1825000",
+      "name": "Fort Wayne city",
+      "population": 268589
+    },
+    {
+      "geoid": "1871000",
+      "name": "South Bend city",
+      "population": 103085
+    },
+    {
+      "geoid": "1912000",
+      "name": "Cedar Rapids city",
+      "population": 137264
+    },
+    {
+      "geoid": "1919000",
+      "name": "Davenport city",
+      "population": 100913
+    },
+    {
+      "geoid": "1921000",
+      "name": "Des Moines city",
+      "population": 212421
+    },
+    {
+      "geoid": "2036000",
+      "name": "Kansas City city",
+      "population": 155135
+    },
+    {
+      "geoid": "2052575",
+      "name": "Olathe city",
+      "population": 145057
+    },
+    {
+      "geoid": "2053775",
+      "name": "Overland Park city",
+      "population": 200306
+    },
+    {
+      "geoid": "2071000",
+      "name": "Topeka city",
+      "population": 125786
+    },
+    {
+      "geoid": "2079000",
+      "name": "Wichita city",
+      "population": 397945
+    },
+    {
+      "geoid": "2146027",
+      "name": "Lexington-Fayette urban county",
+      "population": 323725
+    },
+    {
+      "geoid": "2205000",
+      "name": "Baton Rouge city",
+      "population": 222771
+    },
+    {
+      "geoid": "2240735",
+      "name": "Lafayette city",
+      "population": 121715
+    },
+    {
+      "geoid": "2250115",
+      "name": "Metairie CDP",
+      "population": 139729
+    },
+    {
+      "geoid": "2270000",
+      "name": "Shreveport city",
+      "population": 180982
+    },
+    {
+      "geoid": "2419125",
+      "name": "Columbia CDP",
+      "population": 104338
+    },
+    {
+      "geoid": "2509000",
+      "name": "Brockton city",
+      "population": 105386
+    },
+    {
+      "geoid": "2511000",
+      "name": "Cambridge city",
+      "population": 118796
+    },
+    {
+      "geoid": "2537000",
+      "name": "Lowell city",
+      "population": 118368
+    },
+    {
+      "geoid": "2537490",
+      "name": "Lynn city",
+      "population": 101709
+    },
+    {
+      "geoid": "2545000",
+      "name": "New Bedford city",
+      "population": 100998
+    },
+    {
+      "geoid": "2555745",
+      "name": "Quincy city",
+      "population": 102114
+    },
+    {
+      "geoid": "2567000",
+      "name": "Springfield city",
+      "population": 154749
+    },
+    {
+      "geoid": "2582000",
+      "name": "Worcester city",
+      "population": 207055
+    },
+    {
+      "geoid": "2603000",
+      "name": "Ann Arbor city",
+      "population": 122036
+    },
+    {
+      "geoid": "2621000",
+      "name": "Dearborn city",
+      "population": 107423
+    },
+    {
+      "geoid": "2634000",
+      "name": "Grand Rapids city",
+      "population": 198535
+    },
+    {
+      "geoid": "2646000",
+      "name": "Lansing city",
+      "population": 113023
+    },
+    {
+      "geoid": "2676460",
+      "name": "Sterling Heights city",
+      "population": 133573
+    },
+    {
+      "geoid": "2684000",
+      "name": "Warren city",
+      "population": 137928
+    },
+    {
+      "geoid": "2754880",
+      "name": "Rochester city",
+      "population": 122330
+    },
+    {
+      "geoid": "2758000",
+      "name": "St. Paul city",
+      "population": 307284
+    },
+    {
+      "geoid": "2836000",
+      "name": "Jackson city",
+      "population": 146631
+    },
+    {
+      "geoid": "2915670",
+      "name": "Columbia city",
+      "population": 128548
+    },
+    {
+      "geoid": "2935000",
+      "name": "Independence city",
+      "population": 121740
+    },
+    {
+      "geoid": "2941348",
+      "name": "Lee's Summit city",
+      "population": 103656
+    },
+    {
+      "geoid": "2970000",
+      "name": "Springfield city",
+      "population": 169954
+    },
+    {
+      "geoid": "3006550",
+      "name": "Billings city",
+      "population": 119434
+    },
+    {
+      "geoid": "3128000",
+      "name": "Lincoln city",
+      "population": 294856
+    },
+    {
+      "geoid": "3223770",
+      "name": "Enterprise CDP",
+      "population": 240464
+    },
+    {
+      "geoid": "3231900",
+      "name": "Henderson city",
+      "population": 332141
+    },
+    {
+      "geoid": "3251800",
+      "name": "North Las Vegas city",
+      "population": 278595
+    },
+    {
+      "geoid": "3254600",
+      "name": "Paradise CDP",
+      "population": 185913
+    },
+    {
+      "geoid": "3260600",
+      "name": "Reno city",
+      "population": 273212
+    },
+    {
+      "geoid": "3268400",
+      "name": "Sparks city",
+      "population": 110024
+    },
+    {
+      "geoid": "3268585",
+      "name": "Spring Valley CDP",
+      "population": 219187
+    },
+    {
+      "geoid": "3271400",
+      "name": "Sunrise Manor CDP",
+      "population": 200218
+    },
+    {
+      "geoid": "3345140",
+      "name": "Manchester city",
+      "population": 115643
+    },
+    {
+      "geoid": "3421000",
+      "name": "Elizabeth city",
+      "population": 137302
+    },
+    {
+      "geoid": "3436000",
+      "name": "Jersey City city",
+      "population": 294078
+    },
+    {
+      "geoid": "3451000",
+      "name": "Newark city",
+      "population": 310178
+    },
+    {
+      "geoid": "3457000",
+      "name": "Paterson city",
+      "population": 158735
+    },
+    {
+      "geoid": "3539380",
+      "name": "Las Cruces city",
+      "population": 114197
+    },
+    {
+      "geoid": "3563460",
+      "name": "Rio Rancho city",
+      "population": 108515
+    },
+    {
+      "geoid": "3601000",
+      "name": "Albany city",
+      "population": 100492
+    },
+    {
+      "geoid": "3663000",
+      "name": "Rochester city",
+      "population": 208772
+    },
+    {
+      "geoid": "3673000",
+      "name": "Syracuse city",
+      "population": 146384
+    },
+    {
+      "geoid": "3684000",
+      "name": "Yonkers city",
+      "population": 209978
+    },
+    {
+      "geoid": "3710740",
+      "name": "Cary town",
+      "population": 179306
+    },
+    {
+      "geoid": "3714100",
+      "name": "Concord city",
+      "population": 108719
+    },
+    {
+      "geoid": "3719000",
+      "name": "Durham city",
+      "population": 291467
+    },
+    {
+      "geoid": "3722920",
+      "name": "Fayetteville city",
+      "population": 210815
+    },
+    {
+      "geoid": "3728000",
+      "name": "Greensboro city",
+      "population": 301198
+    },
+    {
+      "geoid": "3731400",
+      "name": "High Point city",
+      "population": 116245
+    },
+    {
+      "geoid": "3774440",
+      "name": "Wilmington city",
+      "population": 120805
+    },
+    {
+      "geoid": "3775000",
+      "name": "Winston-Salem city",
+      "population": 252037
+    },
+    {
+      "geoid": "3825700",
+      "name": "Fargo city",
+      "population": 131627
+    },
+    {
+      "geoid": "3901000",
+      "name": "Akron city",
+      "population": 189247
+    },
+    {
+      "geoid": "3921000",
+      "name": "Dayton city",
+      "population": 136579
+    },
+    {
+      "geoid": "3977000",
+      "name": "Toledo city",
+      "population": 267463
+    },
+    {
+      "geoid": "4009050",
+      "name": "Broken Arrow city",
+      "population": 118180
+    },
+    {
+      "geoid": "4052500",
+      "name": "Norman city",
+      "population": 129672
+    },
+    {
+      "geoid": "4105800",
+      "name": "Bend city",
+      "population": 103390
+    },
+    {
+      "geoid": "4123850",
+      "name": "Eugene city",
+      "population": 179591
+    },
+    {
+      "geoid": "4131250",
+      "name": "Gresham city",
+      "population": 112378
+    },
+    {
+      "geoid": "4134100",
+      "name": "Hillsboro city",
+      "population": 108231
+    },
+    {
+      "geoid": "4164900",
+      "name": "Salem city",
+      "population": 178865
+    },
+    {
+      "geoid": "4202000",
+      "name": "Allentown city",
+      "population": 125976
+    },
+    {
+      "geoid": "4459000",
+      "name": "Providence city",
+      "population": 191767
+    },
+    {
+      "geoid": "4516000",
+      "name": "Columbia city",
+      "population": 139643
+    },
+    {
+      "geoid": "4550875",
+      "name": "North Charleston city",
+      "population": 119913
+    },
+    {
+      "geoid": "4659020",
+      "name": "Sioux Falls city",
+      "population": 201469
+    },
+    {
+      "geoid": "4714000",
+      "name": "Chattanooga city",
+      "population": 185783
+    },
+    {
+      "geoid": "4715160",
+      "name": "Clarksville city",
+      "population": 176456
+    },
+    {
+      "geoid": "4740000",
+      "name": "Knoxville city",
+      "population": 195185
+    },
+    {
+      "geoid": "4751560",
+      "name": "Murfreesboro city",
+      "population": 161445
+    },
+    {
+      "geoid": "4801000",
+      "name": "Abilene city",
+      "population": 128053
+    },
+    {
+      "geoid": "4801924",
+      "name": "Allen city",
+      "population": 110265
+    },
+    {
+      "geoid": "4803000",
+      "name": "Amarillo city",
+      "population": 201885
+    },
+    {
+      "geoid": "4804000",
+      "name": "Arlington city",
+      "population": 397742
+    },
+    {
+      "geoid": "4807000",
+      "name": "Beaumont city",
+      "population": 113279
+    },
+    {
+      "geoid": "4810768",
+      "name": "Brownsville city",
+      "population": 189177
+    },
+    {
+      "geoid": "4813024",
+      "name": "Carrollton city",
+      "population": 133740
+    },
+    {
+      "geoid": "4815976",
+      "name": "College Station city",
+      "population": 124570
+    },
+    {
+      "geoid": "4816432",
+      "name": "Conroe city",
+      "population": 102360
+    },
+    {
+      "geoid": "4817000",
+      "name": "Corpus Christi city",
+      "population": 317419
+    },
+    {
+      "geoid": "4819972",
+      "name": "Denton city",
+      "population": 152866
+    },
+    {
+      "geoid": "4822660",
+      "name": "Edinburg city",
+      "population": 104550
+    },
+    {
+      "geoid": "4827684",
+      "name": "Frisco city",
+      "population": 219304
+    },
+    {
+      "geoid": "4829000",
+      "name": "Garland city",
+      "population": 246844
+    },
+    {
+      "geoid": "4830464",
+      "name": "Grand Prairie city",
+      "population": 201883
+    },
+    {
+      "geoid": "4837000",
+      "name": "Irving city",
+      "population": 256492
+    },
+    {
+      "geoid": "4839148",
+      "name": "Killeen city",
+      "population": 158159
+    },
+    {
+      "geoid": "4841464",
+      "name": "Laredo city",
+      "population": 257619
+    },
+    {
+      "geoid": "4841980",
+      "name": "League City city",
+      "population": 116215
+    },
+    {
+      "geoid": "4842508",
+      "name": "Lewisville city",
+      "population": 131080
+    },
+    {
+      "geoid": "4845000",
+      "name": "Lubbock city",
+      "population": 264814
+    },
+    {
+      "geoid": "4845384",
+      "name": "McAllen city",
+      "population": 145385
+    },
+    {
+      "geoid": "4845744",
+      "name": "McKinney city",
+      "population": 210600
+    },
+    {
+      "geoid": "4847892",
+      "name": "Mesquite city",
+      "population": 149299
+    },
+    {
+      "geoid": "4848072",
+      "name": "Midland city",
+      "population": 136640
+    },
+    {
+      "geoid": "4850820",
+      "name": "New Braunfels city",
+      "population": 104643
+    },
+    {
+      "geoid": "4853388",
+      "name": "Odessa city",
+      "population": 115322
+    },
+    {
+      "geoid": "4856000",
+      "name": "Pasadena city",
+      "population": 149433
+    },
+    {
+      "geoid": "4856348",
+      "name": "Pearland city",
+      "population": 127514
+    },
+    {
+      "geoid": "4858016",
+      "name": "Plano city",
+      "population": 290594
+    },
+    {
+      "geoid": "4861796",
+      "name": "Richardson city",
+      "population": 118731
+    },
+    {
+      "geoid": "4863500",
+      "name": "Round Rock city",
+      "population": 127786
+    },
+    {
+      "geoid": "4870808",
+      "name": "Sugar Land city",
+      "population": 110016
+    },
+    {
+      "geoid": "4872656",
+      "name": "The Woodlands CDP",
+      "population": 121002
+    },
+    {
+      "geoid": "4874144",
+      "name": "Tyler city",
+      "population": 109215
+    },
+    {
+      "geoid": "4876000",
+      "name": "Waco city",
+      "population": 143570
+    },
+    {
+      "geoid": "4879000",
+      "name": "Wichita Falls city",
+      "population": 102581
+    },
+    {
+      "geoid": "4962470",
+      "name": "Provo city",
+      "population": 114766
+    },
+    {
+      "geoid": "4965330",
+      "name": "St. George city",
+      "population": 101995
+    },
+    {
+      "geoid": "4982950",
+      "name": "West Jordan city",
+      "population": 116692
+    },
+    {
+      "geoid": "4983470",
+      "name": "West Valley City city",
+      "population": 138437
+    },
+    {
+      "geoid": "5101000",
+      "name": "Alexandria city",
+      "population": 156976
+    },
+    {
+      "geoid": "5103000",
+      "name": "Arlington CDP",
+      "population": 236254
+    },
+    {
+      "geoid": "5116000",
+      "name": "Chesapeake city",
+      "population": 252583
+    },
+    {
+      "geoid": "5135000",
+      "name": "Hampton city",
+      "population": 137557
+    },
+    {
+      "geoid": "5156000",
+      "name": "Newport News city",
+      "population": 184216
+    },
+    {
+      "geoid": "5157000",
+      "name": "Norfolk city",
+      "population": 233596
+    },
+    {
+      "geoid": "5305210",
+      "name": "Bellevue city",
+      "population": 151847
+    },
+    {
+      "geoid": "5322640",
+      "name": "Everett city",
+      "population": 111845
+    },
+    {
+      "geoid": "5335415",
+      "name": "Kent city",
+      "population": 135603
+    },
+    {
+      "geoid": "5357745",
+      "name": "Renton city",
+      "population": 105317
+    },
+    {
+      "geoid": "5367000",
+      "name": "Spokane city",
+      "population": 230293
+    },
+    {
+      "geoid": "5367167",
+      "name": "Spokane Valley city",
+      "population": 106365
+    },
+    {
+      "geoid": "5370000",
+      "name": "Tacoma city",
+      "population": 222758
+    },
+    {
+      "geoid": "5374060",
+      "name": "Vancouver city",
+      "population": 195300
+    },
+    {
+      "geoid": "5531000",
+      "name": "Green Bay city",
+      "population": 106253
+    },
+    {
+      "geoid": "5548000",
+      "name": "Madison city",
+      "population": 278001
     }
   ]
 }

@@ -96,7 +96,7 @@ export default function CitySearch({ selected, onSelect }: Props) {
           <ul id={listId} role="listbox" className="search-list" aria-label="Matching cities">
             {matches.length === 0 && (
               <li className="search-empty" role="presentation">
-                No city of 100,000+ residents matches “{query.trim()}”.
+                No city in the game matches “{query.trim()}”.
               </li>
             )}
             {matches.map((city, i) => (
